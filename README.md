@@ -2,7 +2,7 @@
 
 ## Versions
 - Python 3.8.5
-- Django2.2
+- Django 2.2
 
 ### Synopsis:
 
