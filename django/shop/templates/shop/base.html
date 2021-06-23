@@ -1,0 +1,156 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Fruit Shop">
+    <meta name="author" content="Diogo Gomes">
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+
+    <title>Fruit Shop</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/cart-dropdown.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading"><a class="navbar-brand" href="{% url 'home' %}">Fruit Shop</a></div>
+        <div class="list-group list-group-flush">
+            {% block leftmenu %}
+
+                {% if user.is_authenticated %}
+                    <script>
+                        let  is_authenticated = true;
+                    </script>
+                    <li><a class="list-group-item list-group-item-action bg-light" href="{% url 'logout' %}?next=/">Log
+                        Out <strong>{{ user.username }}</strong></a></li>
+
+                    {% if user.is_staff %}
+                        <script>
+                            let  is_staff = true;
+                        </script>
+                        <li><a class="list-group-item list-group-item-action bg-light" href="#" id="viewOrders">View Orders</a></li>
+                        <li><a class="list-group-item list-group-item-action bg-light" href="#" id="addFruit">Add Fruit</a></li>
+
+                        <li><a class="list-group-item list-group-item-action bg-light" href="#" id="addFruitCategory">Add Fruit Category</a></li>
+                    {% else %}
+                        <script>
+                            let  is_staff = false;
+                        </script>
+                        <li><a class="list-group-item list-group-item-action bg-light" href="#" id="myCart">My cart</a></li>
+                        <li><a class="list-group-item list-group-item-action bg-light" href="#" id="myOrders">My orders</a></li>
+                    {% endif %}
+
+
+                {% else %}
+                    <script>
+                        let  is_authenticated = false;
+                    </script>
+                    <li><a class="list-group-item list-group-item-action bg-light" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li><a class="list-group-item list-group-item-action bg-light" href="{% url 'signup' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+
+                <li><a class="list-group-item list-group-item-action bg-light" href="{% url 'home' %}">Fruit list</a></li>
+
+
+            {% endblock %}
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+
+    <div id="page-content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    {% if user.is_authenticated and not user.is_staff %}
+                        <li><a class="navbar-brand" href="{% url 'order-list' %}">Orders</a></li>
+                        <li style="min-width: 300px">
+                            <!-- #shopping-cart -->
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-expanded="false"> <span
+                                            class="glyphicon glyphicon-shopping-cart"></span>
+                                        <button class="btn btn-primary" id="cart-toggle">Cart</button>
+                                        <span class="caret"></span></a>
+                                        {% include "shop/shopping-cart.html" %}
+                                </li>
+                            </ul>
+                            <!-- /#shopping-cart -->
+                        </li>
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+
+        </nav>
+
+
+        <div class="container-fluid">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+
+<!-- /#wrapper -->
+
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/jquery.miranda.min.js' %}"></script>
+<script src="{% static 'vendor/jquery.rest.min.js' %}"></script>
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+<script src="{% static 'products/api_poducts.js' %}"></script>
+{% block appscripts %}
+{% endblock %}
+
+</body>
+</html>

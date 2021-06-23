@@ -1,0 +1,31 @@
+<h2>Add Fruit</h2>
+<form id="fruitForm">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for hidden_field in form.hidden_fields %}
+        {{ hidden_field.errors }}
+        {{ hidden_field }}
+    {% endfor %}
+
+    <table border="1">
+        {% for field in form.visible_fields %}
+            <tr>
+                <th>{{ field.label_tag }}</th>
+                <td>
+                    {{ field.errors }}
+                    {{ field.value|default_if_none:"" }}
+                    {{ field }}
+                    {{ field.help_text }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+    {% if object %}
+        <button class="putProduct" type="button">Edit fruit</button>
+    {% else %}
+        <button id="postProduct" type="button">Create fruit</button>
+    {% endif %}
+</form>
