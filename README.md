@@ -38,7 +38,7 @@ Requirements:
 ## use the virtual environment
 $ source myvenv/bin/activate
 ## enter the project file
-cd django/
+$ cd django/
 ## install dependencies
 $ pip install -r requirements.txt
 ## migrate
